@@ -165,11 +165,7 @@ int main(void)
 
       uint8_t dummy_rx_3[3];
 
-      /* This call loads tx_data into the SPI data register and then
-         blocks, waiting for the Master's clock. The Master's
-         HAL_Delay(2) between its own Cycle 1 and Cycle 2 guarantees
-         we reach this line, with tx_data already packed, before the
-         Master starts generating SCK for Cycle 2. */
+
       HAL_SPI_TransmitReceive(
           &hspi1,
           tx_data,
@@ -190,9 +186,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;

@@ -149,10 +149,7 @@ int main(void)
               GPIO_PIN_RESET
           );
 
-          /* Use TransmitReceive (not Transmit-only) so the
-             Master's own RX shift register is also drained
-             during Cycle 1. This avoids a stale/overrun RX
-             flag from corrupting the byte alignment of Cycle 2. */
+
           HAL_SPI_TransmitReceive(
               &hspi1,
               tx_id,
@@ -161,13 +158,7 @@ int main(void)
               HAL_MAX_DELAY
           );
 
-          /* --- Synchronization gap (the required "2-cycle sync") ---
-             The Slave needs time, after Cycle 1, to decode the ID,
-             look up the matching case, pack the 24-bit message and
-             re-arm its SPI (its own HAL_SPI_TransmitReceive call)
-             with the real response bytes before we start generating
-             the clock for Cycle 2. NSS/CS stays LOW during this gap,
-             which is valid SPI behavior (a clock pause). */
+
           HAL_Delay(2);
 
           /* -------- Cycle 2: receive 24-bit response from Slave -------- */
@@ -227,9 +218,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -239,8 +228,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
+
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
@@ -360,14 +348,10 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE END 4 */
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
@@ -385,8 +369,7 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
